@@ -1,0 +1,15 @@
+[project]
+name = "scienceweek-hueofthebrew"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "loguru>=0.7.3",
+    "nltk>=3.9.1",
+    "pandas>=2.3.1",
+    "plotly>=6.3.0",
+    "st-gsheets-connection>=0.1.0",
+    "streamlit>=1.48.1",
+    "wordcloud>=1.9.4",
+]
