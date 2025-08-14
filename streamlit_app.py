@@ -7,6 +7,13 @@ import string
 import pandas as pd
 import plotly.express as px
 from loguru import logger
+import nltk
+
+# Download the 'stopwords' corpus if it's not already present
+try:
+    nltk.download("corpora/stopwords")
+except Exception:
+    nltk.download("stopwords")
 from nltk.corpus import stopwords
 from wordcloud import WordCloud
 
