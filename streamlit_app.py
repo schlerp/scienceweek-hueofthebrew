@@ -6,11 +6,7 @@ import string
 
 import pandas as pd
 import plotly.express as px
-import nltk
-
-# Download the 'stopwords' corpus if it's not already present
-nltk.data.find("corpora/stopwords")
-from nltk.corpus import stopwords
+import spacy
 from wordcloud import WordCloud
 
 
@@ -38,6 +34,8 @@ COMMON_WORDS = [
     "bit",
 ]
 
+NLP = spacy.load("en_core_web_sm")
+
 
 def load_data():
     """
@@ -57,10 +55,12 @@ def build_wordcloud(text: str) -> Image:
     text = text.strip()
     text = text.lower()
     text = "".join(char for char in text if char not in string.punctuation)
-    stop_words = set(stopwords.words("english"))
-    text = " ".join(
-        w for w in text.split(" ") if w not in stop_words and w not in COMMON_WORDS
-    )
+    doc = NLP(text)
+    filtered_words = []
+    for token in doc:
+        if token.pos_ in ("ADJ", "NOUN") and token.text not in COMMON_WORDS:
+            filtered_words.append(token.text)
+    text = " ".join(filtered_words)
 
     # Create a WordCloud object
     wordcloud = WordCloud(background_color="white").generate(text)
@@ -112,5 +112,5 @@ if __name__ == "__main__":
         st.header("The second sample...")
         st.text("This beer appeared lighter in colour")
         s2_text = "\n".join(df[S2_COL_NAME].values)
-        s2_wordcloud = build_wordcloud(s1_text)
-        st.image(s1_wordcloud)
+        s2_wordcloud = build_wordcloud(s2_text)
+        st.image(s2_wordcloud)
