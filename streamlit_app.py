@@ -12,6 +12,7 @@ from wordcloud import WordCloud
 
 S1_COL_NAME = "How would you describe the first beer?"
 S2_COL_NAME = "How would you describe the second beer?"
+DIFFERENCES_COL_NAME = "What was the difference between these beers?"
 
 COMMON_WORDS = [
     "beer",
@@ -114,3 +115,9 @@ if __name__ == "__main__":
         s2_text = "\n".join(df[S2_COL_NAME].values)
         s2_wordcloud = build_wordcloud(s2_text)
         st.image(s2_wordcloud)
+
+        # lets anylyse teh first sample
+        st.header("How you described the differences!")
+        diff_text = "\n".join(df[DIFFERENCES_COL_NAME].values)
+        diff_wordcloud = build_wordcloud(diff_text)
+        st.image(diff_wordcloud)
