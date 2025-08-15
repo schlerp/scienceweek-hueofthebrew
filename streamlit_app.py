@@ -100,24 +100,32 @@ if __name__ == "__main__":
             "No data available! Has the audience responded yet? Or is patty shit at coding? 🫠"
         )
     else:
-        st.table(df)
-
-        # lets anylyse teh first sample
-        st.header("The first sample...")
-        st.text("This beer appeared darker in colour")
-        s1_text = "\n".join(df[S1_COL_NAME].values)
-        s1_wordcloud = build_wordcloud(s1_text)
-        st.image(s1_wordcloud)
-
-        # lets anylyse teh first sample
-        st.header("The second sample...")
-        st.text("This beer appeared lighter in colour")
-        s2_text = "\n".join(df[S2_COL_NAME].values)
-        s2_wordcloud = build_wordcloud(s2_text)
-        st.image(s2_wordcloud)
-
-        # lets anylyse teh first sample
-        st.header("How you described the differences!")
+        # Create word clouds first - side by side layout
+        st.header("Beer Tasting Analysis")
+        
+        # Side by side columns for the two beer samples
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.subheader("Sample 1 - Darker Beer")
+            st.text("This beer appeared darker in colour")
+            s1_text = "\n".join(df[S1_COL_NAME].values)
+            s1_wordcloud = build_wordcloud(s1_text)
+            st.image(s1_wordcloud, use_container_width=True)
+        
+        with col2:
+            st.subheader("Sample 2 - Lighter Beer")
+            st.text("This beer appeared lighter in colour")
+            s2_text = "\n".join(df[S2_COL_NAME].values)
+            s2_wordcloud = build_wordcloud(s2_text)
+            st.image(s2_wordcloud, use_container_width=True)
+        
+        # Differences section full width
+        st.subheader("How you described the differences!")
         diff_text = "\n".join(df[DIFFERENCES_COL_NAME].values)
         diff_wordcloud = build_wordcloud(diff_text)
-        st.image(diff_wordcloud)
+        st.image(diff_wordcloud, use_container_width=True)
+        
+        # Table of responses at the bottom
+        st.header("Raw Responses")
+        st.table(df)
