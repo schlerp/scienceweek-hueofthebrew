@@ -38,7 +38,7 @@ COMMON_WORDS = [
 NLP = spacy.load("en_core_web_sm")
 
 
-def load_data():
+def load_data(url: str) -> pd.DataFrame:
     """
     Load the experiment data from a CSV file.
 
@@ -46,7 +46,7 @@ def load_data():
         A DataFrame containing the experiment data.
     """
     conn = st.connection("gsheets", type=GSheetsConnection)
-    df = conn.read(spreadsheet=st.secrets["public_gsheets_url"])
+    df = conn.read(spreadsheet=url)
     return df
 
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         """
         <style>
             .stApp {
-                background-color: #f0f2f5;
+                background-color: #fffcf7;
             }
         </style>
         """,
@@ -94,38 +94,38 @@ if __name__ == "__main__":
     st.title("🍻 :blue[Science Week 2025] - Hue of the Brew")
 
     # load the data
-    df = load_data()
-    if df.empty:
-        st.error(
-            "No data available! Has the audience responded yet? Or is patty shit at coding? 🫠"
-        )
-    else:
-        # Create word clouds first - side by side layout
-        st.header("Beer Tasting Analysis")
-        
-        # Side by side columns for the two beer samples
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.subheader("Sample 1 - Darker Beer")
-            st.text("This beer appeared darker in colour")
-            s1_text = "\n".join(df[S1_COL_NAME].values)
-            s1_wordcloud = build_wordcloud(s1_text)
-            st.image(s1_wordcloud, use_container_width=True)
-        
-        with col2:
-            st.subheader("Sample 2 - Lighter Beer")
-            st.text("This beer appeared lighter in colour")
-            s2_text = "\n".join(df[S2_COL_NAME].values)
-            s2_wordcloud = build_wordcloud(s2_text)
-            st.image(s2_wordcloud, use_container_width=True)
-        
-        # Differences section full width
-        st.subheader("How you described the differences!")
-        diff_text = "\n".join(df[DIFFERENCES_COL_NAME].values)
-        diff_wordcloud = build_wordcloud(diff_text)
-        st.image(diff_wordcloud, use_container_width=True)
-        
+    # Create word clouds first - side by side layout
+    st.header("Beer Tasting Analysis")
+
+    # Side by side columns for the two beer samples
+    col1, col2 = st.columns(2)
+
+    with col1:
+        df_dark = load_data(url=st.secrets["public_gsheets_url_dark"])
+        if df_dark.empty:
+            st.error(
+                "No data available yet! Has the audience responded yet? Or is patty shit at coding? 🫠"
+            )
+        st.subheader("Sample 1 - Darker Beer")
+        st.text("This beer appeared darker in colour")
+        s1_text = "\n".join(df_dark[S1_COL_NAME].values)
+        s1_wordcloud = build_wordcloud(s1_text)
+        st.image(s1_wordcloud, use_container_width=True)
         # Table of responses at the bottom
         st.header("Raw Responses")
-        st.table(df)
+        st.table(df_dark)
+
+    with col2:
+        df_pale = load_data(url=st.secrets["public_gsheets_url_light"])
+        if df_pale.empty:
+            st.error(
+                "No data available yet! Has the audience responded yet? Or is patty shit at coding? 🫠"
+            )
+        st.subheader("Sample 2 - Lighter Beer")
+        st.text("This beer appeared lighter in colour")
+        s2_text = "\n".join(df_pale[S2_COL_NAME].values)
+        s2_wordcloud = build_wordcloud(s2_text)
+        st.image(s2_wordcloud, use_container_width=True)
+        # Table of responses at the bottom
+        st.header("Raw Responses")
+        st.table(df_pale)
