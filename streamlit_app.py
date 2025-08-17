@@ -10,8 +10,8 @@ import spacy
 from wordcloud import WordCloud
 
 
-S1_COL_NAME = "How would you describe the first beer?"
-S2_COL_NAME = "How would you describe the second beer?"
+S1_COL_NAME = "How would you describe the dark beer?"
+S2_COL_NAME = "How would you describe the pale beer?"
 DIFFERENCES_COL_NAME = "What was the difference between these beers?"
 
 COMMON_WORDS = [
