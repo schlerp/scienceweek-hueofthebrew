@@ -10,9 +10,8 @@ import spacy
 from wordcloud import WordCloud
 
 
-S1_COL_NAME = "How would you describe the dark beer?"
-S2_COL_NAME = "How would you describe the pale beer?"
-DIFFERENCES_COL_NAME = "What was the difference between these beers?"
+S1_COL_NAME = "How would you describe the dark sample?"
+S2_COL_NAME = "How would you describe the pale sample?"
 
 COMMON_WORDS = [
     "beer",
@@ -102,30 +101,32 @@ if __name__ == "__main__":
 
     with col1:
         df_dark = load_data(url=st.secrets["public_gsheets_url_dark"])
+        st.subheader("Sample 1 - Darker Beer")
+        st.text("This beer appeared darker in colour")
         if df_dark.empty:
             st.error(
                 "No data available yet! Has the audience responded yet? Or is patty shit at coding? 🫠"
             )
-        st.subheader("Sample 1 - Darker Beer")
-        st.text("This beer appeared darker in colour")
-        s1_text = "\n".join(df_dark[S1_COL_NAME].values)
-        s1_wordcloud = build_wordcloud(s1_text)
-        st.image(s1_wordcloud, use_container_width=True)
-        # Table of responses at the bottom
-        st.header("Raw Responses")
-        st.table(df_dark)
+        else:
+            s1_text = "\n".join(df_dark[S1_COL_NAME].values)
+            s1_wordcloud = build_wordcloud(s1_text)
+            st.image(s1_wordcloud, use_container_width=True)
+            # Table of responses at the bottom
+            st.header("Raw Responses")
+            st.table(df_dark)
 
     with col2:
         df_pale = load_data(url=st.secrets["public_gsheets_url_light"])
+        st.subheader("Sample 2 - Lighter Beer")
+        st.text("This beer appeared lighter in colour")
         if df_pale.empty:
             st.error(
                 "No data available yet! Has the audience responded yet? Or is patty shit at coding? 🫠"
             )
-        st.subheader("Sample 2 - Lighter Beer")
-        st.text("This beer appeared lighter in colour")
-        s2_text = "\n".join(df_pale[S2_COL_NAME].values)
-        s2_wordcloud = build_wordcloud(s2_text)
-        st.image(s2_wordcloud, use_container_width=True)
-        # Table of responses at the bottom
-        st.header("Raw Responses")
-        st.table(df_pale)
+        else:
+            s2_text = "\n".join(df_pale[S2_COL_NAME].values)
+            s2_wordcloud = build_wordcloud(s2_text)
+            st.image(s2_wordcloud, use_container_width=True)
+            # Table of responses at the bottom
+            st.header("Raw Responses")
+            st.table(df_pale)
